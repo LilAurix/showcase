@@ -2269,12 +2269,8 @@ do
 		});
 
 		task.spawn(function()
-			local whitelistStep = startupStep.new("Waiting for load button to be clicked...", "Clicked!", ui.whitelist.process):Start();
-			repeat
-				task.wait(3);
-			until loadclicked
+			local whitelistStep = startupStep.new("Loading Stuff", "Loaded!", ui.whitelist.process):Start();
 			whitelistStep:Complete();
-
 			local setupStep = startupStep.new("Setting Up...", "Setup Completed!", ui.whitelist.process):Start();
 			doSetup();
 			setupStep:Complete();
@@ -2401,7 +2397,6 @@ do
 	local function setupDragBar(dragBar: TextButton, indent: NumberValue)
 		local isDragging = false;
 		local startPosition, startOffset;
-
 		userInputService.InputBegan:Connect(function(input)
 			if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and mathsUtils:IsWithin2DBounds(input.Position, dragBar.AbsolutePosition, dragBar.AbsolutePosition + dragBar.AbsoluteSize) then
 				isDragging = true;
