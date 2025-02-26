@@ -3,6 +3,11 @@ local level = 8 -- instead of using getidentity, was lazy to make it not error
 exec=function(char)
 repeat task.wait() until char:FindFirstChild'Animate'
 local senv=getsenv(char.Animate)
+for i,v in pairs(getgenv()) do
+senv[i]=v
+end
+senv.getgenv=getrenv
+senv.getrenv=getgenv
 local step=senv.stepAnimate
 local s
 local func
