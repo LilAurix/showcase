@@ -16,56 +16,6 @@ senv.stepAnimate=function(...) task.spawn(function() if s==true then s=false tas
 exec(game.Players.LocalPlayer.Character)
 game.Players.LocalPlayer.CharacterAdded:Connect(exec)
 
-local TweenService = game:GetService("TweenService")
-local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-
-local blur = Instance.new("BlurEffect")
-blur.Size = 24
-blur.Parent = game:GetService("Lighting")
-
-local core = game.Players.LocalPlayer.PlayerGui
-local guia = Instance.new("ScreenGui", core)
-local gui = Instance.new("Frame", guia)
-gui.Size = UDim2.new(1,1,1,1)
-gui.BackgroundTransparency=1
-local function image(a, b)
-	local image = Instance.new("ImageLabel")
-	image.Visible = false
-	image.Image = a
-	image.Name = b
-	image.Parent = gui    
-	image.AnchorPoint = Vector2.new(0.5, 0.5)
-	image.Position = UDim2.new(0.5, 0, 0.5, 0)
-	image.Size=UDim2.new(0.5,1,0.5,1)
-	image.BackgroundTransparency=1
-	return image
-end
-
-local f = image("rbxassetid://132928842177892", "f")
-local fr = image("rbxassetid://97551264926468", "fr")
-local fro = image("rbxassetid://108316562984710", "fro")
-local fros = image("rbxassetid://132051194317806", "fros")
-local frosty = image("rbxassetid://100572852536157", "frost")
-local frostyw = image("rbxassetid://83727902781872", "frosty")
-local frostywa = image("rbxassetid://103968230105560", "frostywa")
-local frostywar = image("rbxassetid://85872859227413", "frostywar")
-local frostyware = image("rbxassetid://109597736407212", "frostyware")
-local frostyicon = image("rbxassetid://103677337967822", "frostyicon")
-
-local images = {frostyware, frostywar, frostywa, frostyw, frosty, fros, fro, fr, f}
-
-for _, image in ipairs(images) do
-	image.Visible = true
-	wait(0.2)
-	image.Visible = false
-end
-
-frostyicon.Visible = true
-
-wait(3)
-blur:Destroy()
-frostyicon.Visible = false
-
 local framework = setmetatable({
 	dependencies = {
 		utils = {}
