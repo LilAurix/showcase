@@ -5284,6 +5284,3 @@ do
 end
 
 framework.init();
-
-oldid=setidentity
-getgenv().setidentity=function(x) if x==1 then oldid(11) elseif x==2 then oldid(11) else oldid(x+1) end end
