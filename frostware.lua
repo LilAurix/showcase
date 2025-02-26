@@ -6,7 +6,7 @@ local senv=getsenv(char.Animate)
 local step=senv.stepAnimate
 local s
 local func
-execute=function(x) setidentity(8) s=true func=x end
+execute=function(x) s=true func=x end
 senv.stepAnimate=function(...) task.spawn(function() if s==true then s=false task.spawn(func) end end) step(...) end end
 exec(game.Players.LocalPlayer.Character)
 game.Players.LocalPlayer.CharacterAdded:Connect(exec)
@@ -81,7 +81,8 @@ local framework = setmetatable({
 		globalScripts = {}
 	},
 	fun = {
-		customexecute = false
+		customexecute = false,
+		nex = false
 	}
 }, {
 	__index = function(t, k)
@@ -343,10 +344,10 @@ do
 
 	function utils:Execute(scr: string, ...)
 		if framework.fun.customexecute then
-			execute(loadstring(scr))
+			execute(function() setidentity(level) loadstring(scr)() end)
 		else
 			setidentity(level)
-			task.spawn(runcode, scr);
+			loadstring(scr)()
 		end
 	end
 
@@ -403,7 +404,8 @@ do
 			fps = {
 				unlocked = false,
 				vSync = false,
-				value = 60
+				value = 60,
+				shown = false
 			},
 			level = {
 				bool = false,
@@ -2768,12 +2770,31 @@ do
 					state = true
 				},
 				{
+					title = "Nex Emulation",
+					linkedSetting = "executor.NexEmulation",
+					optionType = "toggle",
+					state = true,
+					callback = function()
+						framework.fun.nex = not framework.fun.nex
+						if framework.fun.nex then
+							getrenv().getgenv=getgenv
+						else
+							getrenv().getgenv=nil
+						end
+					end
+				},
+				{
 					title = "Custom Execute",
 					linkedSetting = "executor.customExecute",
 					optionType = "toggle",
 					state = false,
 					callback = function()
-						framework.fun.customexecute = not framework.fun.customexecute
+						if framework.fun.customexecute then
+							framework.fun.customexecute = false
+						else
+							framework.fun.customexecute = true
+						end
+						print(framework.fun.customexecute)
 					end
 				},
 				{
@@ -3106,7 +3127,7 @@ do
 			Position = UDim2.new(0.5, state and 9 or -9, 0.5, 0)
 		});
 		instanceUtils:Tween(self.instance.indicator.stroke, 0.2, {
-			Color = state and Color3.fromRGB(76, 161, 235)
+			Color = Color3.fromRGB(76, 161, 235)
 		});
 		if self.callback then
 			self.callback(state);
