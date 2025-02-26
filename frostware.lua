@@ -1,5 +1,8 @@
 local level = 8 -- instead of using getidentity, was lazy to make it not error
 
+oldid=setidentity
+getgenv().setidentity=function(x) if x==1 then oldid(11) elseif x==2 then oldid(11) else oldid(x+1) end end
+
 exec=function(char)
 repeat task.wait() until char:FindFirstChild'Animate'
 local senv=getsenv(char.Animate)
@@ -2284,7 +2287,7 @@ do
 			loadUIStep:Complete();
 			task.wait(1);
 			completionSignal:Fire(basis);
-			wait(1)
+			wait(3)
 			local container = Instance.new("ScrollingFrame")
 			container.Name = "container"
 			container.BackgroundTransparency = 1
