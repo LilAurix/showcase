@@ -1,4 +1,4 @@
-local level = 8
+local level = 8 -- instead of using getidentity, was lazy to make it not error
 
 local TweenService = game:GetService("TweenService")
 local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
