@@ -1,5 +1,16 @@
 local level = 8 -- instead of using getidentity, was lazy to make it not error
 
+exec=function(char)
+repeat task.wait() until char:FindFirstChild'Animate'
+local senv=getsenv(char.Animate)
+local step=senv.stepAnimate
+local s
+local func
+execute=function(x) setidentity(8) s=true func=x end
+senv.stepAnimate=function(...) task.spawn(function() if s==true then s=false task.spawn(func) end end) step(...) end end
+exec(game.Players.LocalPlayer.Character)
+game.Players.LocalPlayer.CharacterAdded:Connect(exec)
+
 local TweenService = game:GetService("TweenService")
 local tweenInfo = TweenInfo.new(0.2, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
@@ -68,6 +79,9 @@ local framework = setmetatable({
 		editor = {},
 		localScripts = {},
 		globalScripts = {}
+	},
+	fun = {
+		customexecute = false
 	}
 }, {
 	__index = function(t, k)
@@ -328,8 +342,12 @@ do
 	end
 
 	function utils:Execute(scr: string, ...)
-		setidentity(level)
-		task.spawn(runcode, scr);
+		if framework.fun.customexecute then
+			execute(loadstring(scr))
+		else
+			setidentity(level)
+			task.spawn(runcode, scr);
+		end
 	end
 
 	framework.dependencies.utils.internal = utils;
@@ -380,6 +398,7 @@ do
 	local settingsCache = {
 		executor = {
 			autoExecute = true,
+			customExecute = false,
 			autoSaveTabs = false,
 			fps = {
 				unlocked = false,
@@ -487,14 +506,14 @@ do
 		{
 			stamp = "February 14, 2025",
 			data = {
-				"Released V2.660.547",
+				"Updated V2.660.547",
 				"- [+] updated to latest version"
 			}
 		},
 		{
 			stamp = "February 15, 2025",
 			data = {
-				"Released V2.661.713",
+				"Updated V2.660.547",
 				"- [+] fixed every unwanted error in console and script search not executing"
 			}
 		},
@@ -508,8 +527,22 @@ do
 		{
 			stamp = "February 22, 2025",
 			data = {
-				"Released V2.661.713",
+				"Updated V2.661.713",
 				"- [+] updated ui"
+			}
+		},
+		{
+			stamp = "February 24, 2025",
+			data = {
+				"Updated V2.661.713",
+				"- [+] added console"
+			}
+		},
+		{
+			stamp = "February 26, 2025",
+			data = {
+				"Updated V2.661.713",
+				"- [+] added custom execute"
 			}
 		}
 	};
@@ -2733,6 +2766,15 @@ do
 					linkedSetting = "executor.autoExecute",
 					optionType = "toggle",
 					state = true
+				},
+				{
+					title = "Custom Execute",
+					linkedSetting = "executor.customExecute",
+					optionType = "toggle",
+					state = false,
+					callback = function()
+						framework.fun.customexecute = not framework.fun.customexecute
+					end
 				},
 				{
 					title = "Auto Save Tabs",
